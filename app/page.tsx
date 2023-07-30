@@ -5,7 +5,7 @@ import Modal from "./components/Modal";
 
 export default function Home() {
   const [email, setEmail] = useState("");
-  const [isValidEmail, setIsValidEmail] = useState(false);
+  const [isValidEmail, setIsValidEmail] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleEmailChange = (event: any) => {
