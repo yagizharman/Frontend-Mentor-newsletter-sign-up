@@ -1,113 +1,122 @@
-import Image from 'next/image'
+"use client";
+import Image from "next/image";
+import { useState } from "react";
+import Modal from "./components/Modal";
 
 export default function Home() {
+  const [email, setEmail] = useState("");
+  const [isValidEmail, setIsValidEmail] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleEmailChange = (event: any) => {
+    setEmail(event.target.value);
+    // Reset the validation status when the user edits the email field
+  };
+
+  const checkEmailValidity = (event: any) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setIsValidEmail(emailRegex.test(email));
+    if (isValidEmail) {
+      setIsOpen(true);
+    }
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <>
+      {isOpen && isValidEmail ? (
+        <Modal
+          isOpen={isOpen}
+          email={email}
+          onClose={() => setIsOpen(false)}
+        ></Modal>
+      ) : (
+        <div className=" min-h-screen bg-charcoalgrey flex justify-center flex-col items-center">
+          <div className=" card flex flex-col md:flex-row justify-center items-center bg-white rounded-3xl">
+            <div className="flex flex-col justify-center items-center mr-5 order-2 md:order-1">
+              <div className="flex flex-col justify-center ml-9 md:w-96 ">
+                <h1 className="text-4xl md:text-5xl mt-4  text-left text-darkslategrey mb-5 font-roboto font-bold  ">
+                  Stay updated!
+                </h1>
+                <span className="text-md mb-5">
+                  Join 60,000+ product managers receiving monthly updates on:
+                </span>
+                <ul className="text-sm">
+                  <li className="flex flex-row mb-3">
+                    <img src="assets/icon-list.svg" className="mr-3" alt="" />{" "}
+                    Product discovery and building what matters
+                  </li>
+                  <li className="flex flex-row mb-3">
+                    <img src="assets/icon-list.svg" className="mr-3" alt="" />{" "}
+                    Measuring to ensure updates are a success
+                  </li>
+                  <li className="flex flex-row mb-3">
+                    <img src="assets/icon-list.svg" className="mr-3" alt="" />{" "}
+                    And much more!
+                  </li>
+                </ul>
+                <div className="mt-5 flex flex-col justify-content ">
+                  <div className="flex flex-row items-center  mb-2 ">
+                    <label className="justify-start text-sm font-bold text-charcoalgrey">
+                      Email address
+                    </label>
+                    <span
+                      className={`ml-auto text-sm text-red-500 font-semibold transition ${
+                        isValidEmail ? "hidden" : ""
+                      }`}
+                    >
+                      Valid email required
+                    </span>
+                  </div>
+
+                  <input
+                    type="email"
+                    id="email"
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-4 ${
+                      !isValidEmail ? "bg-red-200 border-red-600 " : ""
+                    }`}
+                    value={email}
+                    onChange={handleEmailChange}
+                    placeholder="email@company.com"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="justify-center p-4 rounded-lg mt-5 mb-5 md:mb-0 text-mywhite bg-gradient-to-r text-bold from-darkslategrey to-darkslategrey hover:from-pink-500 hover:to-primary transition"
+                    onClick={checkEmailValidity}
+                  >
+                    Subscribe to monthly newsletter
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="w-full md:w-auto order-1 md:order-2 md:my-5 md:mr-5 md:ml-10">
+              <img
+                className="hidden md:block  w-full  "
+                src="assets/illustration-sign-up-desktop.svg"
+                alt="pic"
+              />
+              <img
+                className="md:hidden  w-full "
+                src="assets/illustration-sign-up-mobile.svg"
+                alt="pic"
+              />
+            </div>
+          </div>
+          <footer>
+            <div className="attribution text-mygrey text-center hidden md:block ">
+              Challenge by{" "}
+              <a
+                href="https://www.frontendmentor.io?ref=challenge"
+                target="_blank"
+              >
+                Frontend Mentor
+              </a>
+              . Coded by <a href="#">Your Name Here</a>.
+            </div>
+          </footer>
         </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+      )}
+    </>
+  );
 }
